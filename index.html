@@ -3,33 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalkulačka horizontálních žaluzií</title>
+<title>Kalkulačka žaluzií</title>
 <style>
   :root {
-    --bg: #f5f4f0;
-    --surface: #ffffff;
-    --border: #e2e0d8;
-    --border-mid: #c8c6bc;
-    --text: #1a1917;
-    --text-muted: #6b6960;
-    --text-hint: #9e9b90;
-    --accent: #2a5c3f;
-    --accent-light: #e8f2ec;
-    --accent-text: #1e4530;
-    --warn-bg: #fef8ec;
-    --warn-text: #8a6000;
-    --danger: #c0392b;
-    --radius: 10px;
-    --radius-sm: 6px;
+    --bg: #f5f4f0; --surface: #ffffff; --border: #e2e0d8; --border-mid: #c8c6bc;
+    --text: #1a1917; --text-muted: #6b6960; --text-hint: #9e9b90;
+    --accent: #2a5c3f; --accent-light: #e8f2ec; --accent-text: #1e4530;
+    --warn-bg: #fef8ec; --warn-text: #8a6000; --danger: #c0392b;
+    --radius: 10px; --radius-sm: 6px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Georgia', 'Times New Roman', serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 2rem 1rem;
-  }
+  body { font-family: 'Georgia', 'Times New Roman', serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
   h1 { font-size: 1.6rem; font-weight: normal; letter-spacing: -0.02em; margin-bottom: 0.25rem; }
   .container { max-width: 820px; margin: 0 auto; }
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 12px; }
@@ -43,12 +27,14 @@
   .pitem { display: flex; align-items: center; justify-content: space-between; padding: 8px 11px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 12px; cursor: pointer; user-select: none; font-family: 'Helvetica Neue', Arial, sans-serif; transition: background .1s, border-color .1s; }
   .pitem:hover { background: var(--accent-light); }
   .pitem.on { border-color: var(--accent); background: var(--accent-light); }
-  .pitem.on .pn { color: var(--accent-text); }
-  .pitem.on .pp { color: var(--accent); }
+  .pitem.on .pn { color: var(--accent-text); } .pitem.on .pp { color: var(--accent); }
   .pn { color: var(--text-muted); max-width: 74%; line-height: 1.3; }
   .pp { color: var(--text-hint); font-weight: bold; white-space: nowrap; font-size: 11px; }
   .add-btn { width: 100%; padding: 11px; border: 1.5px dashed var(--border-mid); border-radius: var(--radius-sm); background: transparent; color: var(--text-muted); font-size: 13px; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; transition: all .15s; margin-top: 4px; }
   .add-btn:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent-text); }
+  .save-btn { width: 100%; padding: 13px; border: none; border-radius: var(--radius-sm); background: var(--accent); color: #fff; font-size: 14px; font-weight: bold; cursor: pointer; font-family: 'Helvetica Neue', Arial, sans-serif; transition: background .15s; margin-top: 10px; }
+  .save-btn:hover { background: var(--accent-text); }
+  .save-btn:disabled { background: var(--text-hint); cursor: not-allowed; }
   .polozka { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 8px; overflow: hidden; }
   .pol-head { display: flex; align-items: center; justify-content: space-between; padding: 11px 14px; cursor: pointer; user-select: none; transition: background .1s; font-family: 'Helvetica Neue', Arial, sans-serif; }
   .pol-head:hover { background: var(--bg); }
@@ -61,8 +47,7 @@
   .pol-body { padding: 12px 14px; border-top: 1px solid var(--border); background: var(--bg); display: none; font-family: 'Helvetica Neue', Arial, sans-serif; }
   .bd-row { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
   .bd-row:last-child { border: none; font-weight: bold; font-size: 13px; padding-top: 8px; }
-  .bd-l { color: var(--text-muted); }
-  .bd-v { color: var(--text); font-weight: bold; }
+  .bd-l { color: var(--text-muted); } .bd-v { color: var(--text); font-weight: bold; }
   .note { font-size: 11px; color: var(--text-hint); margin-top: 6px; font-family: 'Helvetica Neue', Arial, sans-serif; }
   .warn { font-size: 12px; color: var(--warn-text); background: var(--warn-bg); border-radius: var(--radius-sm); padding: 7px 11px; margin-top: 8px; font-family: 'Helvetica Neue', Arial, sans-serif; border: 1px solid #f0d080; }
   .metric-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
@@ -71,13 +56,14 @@
   .mv { font-size: 20px; font-weight: bold; color: var(--text); }
   .total-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 13px; font-family: 'Helvetica Neue', Arial, sans-serif; }
   .total-row:last-child { border: none; font-weight: bold; font-size: 16px; padding-top: 10px; color: var(--accent-text); }
-  .tl { color: var(--text-muted); }
-  .tv { color: var(--text); font-weight: bold; }
+  .tl { color: var(--text-muted); } .tv { color: var(--text); font-weight: bold; }
   .chevron { display: inline-block; font-size: 12px; color: var(--text-hint); transition: transform .2s; }
   .open .chevron { transform: rotate(180deg); }
   .empty { font-size: 13px; color: var(--text-hint); font-family: 'Helvetica Neue', Arial, sans-serif; }
   .header-bar { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 2rem; }
-  .badge { font-size: 11px; font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--accent-light); color: var(--accent-text); padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(42,92,63,.2); }
+  .status { font-size: 13px; font-family: 'Helvetica Neue', Arial, sans-serif; padding: 10px 14px; border-radius: var(--radius-sm); margin-top: 10px; display: none; }
+  .status.ok { background: var(--accent-light); color: var(--accent-text); border: 1px solid rgba(42,92,63,.2); }
+  .status.err { background: #fde8e8; color: var(--danger); border: 1px solid #f0b0b0; }
   @media (max-width: 600px) { .g4 { grid-template-columns: 1fr 1fr; } .metric-row { grid-template-columns: 1fr 1fr; } .pripl-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -85,8 +71,16 @@
 <div class="container">
   <div class="header-bar">
     <h1>Kalkulačka žaluzií</h1>
-    
   </div>
+
+  <!-- Zákazník -->
+  <div class="card">
+    <div class="sec-title">Zákazník / zakázka</div>
+    <div><label>Jméno zákazníka nebo název zakázky</label>
+    <input type="text" id="f-zakaznik" placeholder="např. Jana Nováková – Hlavní 5, Praha"></div>
+  </div>
+
+  <!-- Formulář nové položky -->
   <div class="card" id="form-card">
     <div class="sec-title">Nová položka</div>
     <div class="g2">
@@ -105,22 +99,33 @@
     <div id="form-note" class="note"></div>
     <button class="add-btn" onclick="pridatPolozku()">＋ Přidat položku do objednávky</button>
   </div>
+
   <div id="polozky-wrap"></div>
+
+  <!-- Souhrn + uložení -->
   <div class="card" id="total-card">
     <div class="sec-title">Souhrn objednávky</div>
     <div id="total-body"><span class="empty">Zatím žádné položky.</span></div>
+    <button class="save-btn" id="save-btn" onclick="ulozitZakazku()" disabled>💾 Uložit zakázku do Google tabulky</button>
+    <div class="status" id="status-msg"></div>
   </div>
 </div>
+
 <script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7_AzPtzB2XtW5YewkrxNkuci4zNNxAs1lFAlPRBvTon-9sOmWsTc94LDwm-tEYUA/exec';
+
 const ISOLINE={sirky:[300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200],vysky:[300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200],ceny:[[318,342,368,323,434,456,478,511,534,552,576,635,650,675,699,718,745,794,823,841],[335,359,382,335,461,480,511,542,567,589,627,675,704,725,751,776,799,863,893,918],[344,369,397,351,476,503,534,572,598,622,649,715,745,770,794,823,849,915,943,970],[364,391,413,369,503,529,561,604,639,666,696,767,796,799,852,886,911,985,1039,1055],[374,403,437,390,534,565,593,646,674,697,739,819,849,876,910,943,974,1048,1104,1145],[392,434,455,407,552,588,620,674,708,732,771,854,891,923,961,991,1021,1107,1164,1226],[403,442,476,422,576,616,650,708,749,782,820,904,941,980,1015,1053,1085,1174,1214,1310],[419,456,497,445,604,543,682,749,782,823,863,955,993,1035,1072,1107,1148,1240,1299,1350],[432,472,515,458,627,570,708,776,818,859,900,995,1038,1079,1119,1160,1203,1296,1355,1417],[450,492,535,476,652,699,741,820,857,900,979,1044,1089,1136,1180,1221,1264,1364,1417,1462],[461,511,560,495,679,721,770,843,892,940,987,1090,1140,1187,1235,1275,1326,1430,1486,1600],[474,523,571,512,699,751,797,871,923,973,1021,1136,1182,1232,1281,1326,1376,1486,1552,1682],[489,541,589,531,725,776,826,906,964,1014,1068,1182,1235,1287,1333,1400,1440,1551,1608,1750],[503,560,616,553,751,801,859,941,999,1053,1111,1229,1286,1338,1394,1445,1499,1598,1690,1799],[515,571,628,568,774,826,887,979,1035,1089,1148,1271,1326,1379,1440,1496,1551,1677,1753,1861],[534,588,649,584,799,869,918,1012,1071,1131,1189,1319,1377,1435,1492,1557,1613,1739,1825,1926],[542,604,669,599,820,883,943,1039,1100,1164,1225,1358,1424,1480,1520,1604,1665,1797,1894,2009],[560,620,685,621,847,911,973,1070,1145,1208,1264,1406,1475,1534,1592,1663,1727,1860,1964,2092],[572,641,703,637,874,940,1007,1104,1182,1244,1301,1458,1520,1585,1654,1721,1796,1929,2009,2173],[584,650,722,652,892,962,1031,1145,1214,1280,1353,1498,1565,1634,1715,1790,1832,1983,2097,2253]],priplatky:[{id:'barva',name:'Barva lamel (780,783,1940,8005,8101,8300,8204,8107)',sazba:105,j:'m2'},{id:'perf',name:'Perforované lamely (PR1,PR58,PR61,PR103,PR285)',sazba:92,j:'m2'},{id:'l16',name:'Lamela 16 mm',sazba:90,j:'m2'},{id:'l25std',name:'Lamela 25×0,21 (č. 101–155, 211–265, 311–371, 700, 714)',sazba:90,j:'m2'},{id:'l25sr',name:'Lamela 25×0,21 SR/SM (SR 621–630, SM 801–869)',sazba:251,j:'m2'},{id:'drevo',name:'Imitace dřeva',sazba:205,j:'m2'},{id:'domyk',name:'Domykatelné provedení',sazba:40,j:'m2'},{id:'drevodomyk',name:'Imitace dřeva + domykatelné',sazba:323,j:'m2'},{id:'alprofil',name:'Horní + dolní profil Al (pouze Isoline)',sazba:94,j:'m2'},{id:'krytiloco',name:'Krycí lišta Loco v imitaci dřeva',sazba:105,j:'bm'},{id:'distpodl',name:'Distanční podložka',sazba:8,j:'ks'},{id:'bezprvek',name:'Bezpečnostní prvek',sazba:15,j:'ks'},{id:'alral',name:'Profily Al v RAL',sazba:178,j:'bm'},{id:'aldrev',name:'Profily Al v imitaci dřeva',sazba:159,j:'bm'},{id:'fedrev',name:'Profily Fe v imitaci dřeva',sazba:159,j:'bm'}]};
 const PRIM={sirky:[300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200],vysky:[300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400],ceny:[[319,343,368,391,435,457,478,511,534,552,576,636,650,676,700,718,746,794,823,841],[336,360,383,406,462,481,511,543,568,590,627,676,705,725,752,776,799,863,893,919],[344,370,397,425,476,504,534,573,598,622,649,716,746,770,794,823,850,915,943,971],[365,391,413,447,504,529,562,604,639,666,696,768,797,799,852,886,912,985,1040,1056],[374,403,437,472,534,566,593,647,674,697,740,820,850,877,910,943,975,1048,1104,1145],[393,435,455,493,552,589,620,674,708,733,771,855,891,924,961,991,1022,1108,1165,1226],[403,442,476,511,576,616,650,708,749,782,821,904,942,981,1016,1053,1086,1174,1214,1311],[419,457,498,539,604,643,683,749,782,823,863,955,994,1035,1073,1108,1149,1241,1289,1351],[432,472,516,555,627,671,708,776,818,860,901,995,1039,1080,1120,1161,1203,1296,1356,1417],[451,493,535,576,653,700,741,821,857,901,979,1045,1089,1137,1180,1221,1265,1364,1417,1462],[462,511,561,599,679,722,770,844,892,941,988,1091,1140,1188,1236,1276,1327,1431,1486,1600],[475,523,572,620,700,752,798,872,924,973,1022,1137,1183,1232,1282,1327,1376,1486,1553,1682],[489,541,590,643,725,776,827,907,965,1014,1069,1183,1236,1288,1334,1400,1440,1552,1609,1750],[504,561,616,670,752,802,860,942,1000,1053,1111,1230,1287,1339,1394,1445,1500,1599,1691,1800],[516,572,628,688,775,827,887,979,1035,1089,1149,1271,1327,1380,1440,1496,1552,1678,1754,1861],[534,589,649,707,799,869,919,1012,1071,1132,1190,1319,1377,1436,1492,1558,1613,1739,1825,1927],[543,604,670,725,821,884,943,1040,1100,1165,1225,1358,1425,1480,1520,1605,1665,1797,1894,2009],[561,620,685,752,847,912,973,1070,1145,1208,1265,1407,1475,1535,1593,1663,1727,1860,1964,2093],[573,642,704,771,874,941,1007,1104,1183,1244,1301,1459,1520,1586,1655,1721,1796,1929,2009,2174],[585,650,723,789,892,962,1031,1145,1214,1281,1353,1498,1565,1634,1715,1770,1832,1984,2097,2254],[598,668,746,806,912,983,1056,1185,1243,1317,1400,1541,1611,1685,1772,1824,1871,2038,2192,2335],[612,677,766,823,930,1008,1085,1225,1272,1353,1449,1580,1658,1732,1832,1875,1910,2093,2278,2414]],priplatky:[{id:'barva',name:'Barva lamel (780,783,1940,8005,8101,8300,8204,8107)',sazba:105,j:'m2'},{id:'perf',name:'Perforované lamely (PR1,PR58,PR61,PR103,PR285)',sazba:92,j:'m2'},{id:'l16',name:'Lamela 16 mm',sazba:90,j:'m2'},{id:'l25std',name:'Lamela 25×0,21 (č. 101–155, 211–265, 311–371, 700, 714)',sazba:90,j:'m2'},{id:'l25sr',name:'Lamela 25×0,21 SR/SM (SR 621–630, SM 801–869)',sazba:251,j:'m2'},{id:'drevo',name:'Imitace dřeva',sazba:205,j:'m2'},{id:'domyk',name:'Domykatelné provedení',sazba:40,j:'m2'},{id:'drevodomyk',name:'Imitace dřeva + domykatelné',sazba:323,j:'m2'},{id:'distpodl',name:'Distanční podložka',sazba:8,j:'ks'},{id:'bezprvek',name:'Bezpečnostní prvek',sazba:15,j:'ks'},{id:'alral',name:'Profily Al v RAL',sazba:178,j:'bm'},{id:'aldrev',name:'Profily Al v imitaci dřeva',sazba:159,j:'bm'},{id:'fedrev',name:'Profily Fe v imitaci dřeva',sazba:159,j:'bm'}]};
 const ECO={sirky:[300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400],vysky:[300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500],ceny:[[256,279,299,314,351,370,390,406,430,448,465,511,527,544,566,580,599,643,666,677,696,708],[274,291,308,330,372,393,406,440,457,475,506,546,568,587,604,625,644,697,719,741,763,782],[279,302,319,341,385,403,430,462,481,504,526,575,599,620,643,666,688,741,763,783,806,827],[295,314,333,362,403,430,452,489,515,538,561,619,643,644,689,712,734,794,838,852,870,887],[304,328,351,380,430,453,475,520,544,562,597,658,685,707,731,763,787,845,887,923,960,993],[315,351,370,396,447,474,499,544,572,593,622,689,718,746,775,798,825,892,938,990,1042,1094],[328,359,385,406,465,497,527,573,603,628,664,726,758,789,821,851,875,944,979,1056,1138,1215],[338,370,400,435,489,517,551,603,628,666,697,769,799,832,864,892,925,1000,1039,1089,1143,1192],[349,380,416,451,506,541,573,625,658,696,723,800,838,869,904,936,968,1045,1091,1145,1195,1247],[366,396,431,465,528,566,598,664,696,723,788,844,877,913,949,985,1019,1100,1145,1180,1215,1250],[371,406,452,483,547,583,620,677,718,758,797,880,919,958,993,1028,1070,1155,1202,1290,1379,1469],[385,420,460,499,566,604,644,701,747,787,825,913,952,991,1035,1070,1111,1202,1250,1358,1466,1572],[395,437,475,517,587,625,670,731,776,821,857,952,993,1037,1076,1128,1161,1250,1295,1409,1520,1633],[405,452,497,539,604,648,696,758,806,847,898,991,1037,1080,1122,1165,1210,1288,1363,1450,1541,1628],[418,460,510,552,622,670,712,788,832,877,925,1022,1070,1112,1161,1208,1250,1351,1410,1498,1586,1674],[430,474,526,572,644,700,741,820,863,913,960,1067,1111,1157,1208,1254,1300,1405,1471,1552,1633,1715],[440,489,539,587,664,710,763,838,887,938,988,1092,1148,1191,1225,1294,1341,1449,1528,1618,1713,1615],[452,499,551,604,685,734,787,863,923,971,1019,1137,1185,1237,1287,1339,1392,1498,1581,1687,1789,1891],[462,516,568,622,705,758,814,887,952,1006,1048,1173,1225,1281,1330,1387,1449,1553,1618,1754,1886,2019],[472,527,585,641,719,776,832,923,979,1031,1089,1210,1260,1317,1380,1427,1478,1600,1691,1819,1946,2072],[483,539,603,650,734,794,852,960,1007,1058,1128,1243,1294,1353,1431,1468,1505,1642,1761,1884,2005,2126],[497,547,622,670,751,815,874,993,1031,1088,1166,1279,1328,1388,1484,1509,1535,1690,1832,1949,2066,2183],[506,562,643,683,766,832,893,1029,1056,1115,1210,1316,1362,1423,1535,1551,1560,1733,1903,2014,2125,2237]],priplatky:[{id:'barva',name:'Barva lamel (780,783,1940,8005,8101,8300,8204,8107)',sazba:105,j:'m2'},{id:'perf',name:'Perforované lamely (PR1,PR58,PR61,PR103,PR285)',sazba:92,j:'m2'},{id:'l16',name:'Lamela 16 mm',sazba:90,j:'m2'},{id:'l25std',name:'Lamela 25×0,21 (č. 101–155, 211–265, 311–371, 700, 714)',sazba:90,j:'m2'},{id:'l25sr',name:'Lamela 25×0,21 SR/SM (SR 621–630, SM 801–869)',sazba:251,j:'m2'},{id:'drevo',name:'Imitace dřeva',sazba:205,j:'m2'},{id:'domyk',name:'Domykatelné provedení',sazba:40,j:'m2'},{id:'drevodomyk',name:'Imitace dřeva + domykatelné',sazba:323,j:'m2'},{id:'distpodl',name:'Distanční podložka',sazba:8,j:'ks'},{id:'bezprvek',name:'Bezpečnostní prvek',sazba:15,j:'ks'},{id:'alral',name:'Profily Al v RAL',sazba:178,j:'bm'},{id:'aldrev',name:'Profily Al v imitaci dřeva',sazba:159,j:'bm'},{id:'fedrev',name:'Profily Fe v imitaci dřeva',sazba:159,j:'bm'}]};
+
 const CENIKI={isoline:ISOLINE,prim:PRIM,eco:ECO};
 const TYPY={isoline:'Isoline / Loco',prim:'Isoline Prim',eco:'Isoline ECO'};
 let aktivni={},polozky=[],nextId=1;
+
 function nb(arr,val){for(let i=0;i<arr.length;i++)if(arr[i]>=val)return{idx:i,v:arr[i]};return{idx:arr.length-1,v:arr[arr.length-1]};}
 function ceil(v){return Math.ceil(v);}
 function kc(v){return v.toLocaleString('cs-CZ')+'\u00a0K\u010d';}
+
 function renderPriplatky(){
   const typ=document.getElementById('f-typ').value,c=CENIKI[typ];
   aktivni={};
@@ -133,22 +138,25 @@ function renderPriplatky(){
     g.appendChild(d);
   });
 }
+
 function kalkuluj(typ,sirkaIn,vyskaIn,kusy,montazKs,priplIds){
   const c=CENIKI[typ],s=nb(c.sirky,sirkaIn),v=nb(c.vysky,vyskaIn);
   const zaklCena=c.ceny[v.idx][s.idx],plocha=(s.v/1000)*(v.v/1000);
-  let pripl=0;const priplRozpis=[];
+  let pripl=0;const priplRozpis=[];const priplNazvy=[];
   c.priplatky.forEach(p=>{
     if(!priplIds[p.id])return;
     let castka;
     if(p.j==='m2'){castka=ceil(p.sazba*plocha);priplRozpis.push({name:p.name,castka,info:p.sazba+' K\u010d/m\u00b2 \u00d7 '+plocha.toFixed(3).replace('.',',')+' m\u00b2'});}
     else if(p.j==='bm'){const bm=s.v/1000;castka=ceil(p.sazba*bm);priplRozpis.push({name:p.name,castka,info:p.sazba+' K\u010d/bm \u00d7 '+bm.toFixed(3).replace('.',',')+' bm'});}
     else{castka=p.sazba;priplRozpis.push({name:p.name,castka,info:p.sazba+' K\u010d/ks'});}
+    priplNazvy.push(p.name);
     pripl+=castka;
   });
   const cena1ks=zaklCena+pripl,bezM=cena1ks*kusy,sM=bezM+montazKs*kusy;
   const warn=(sirkaIn>c.sirky[c.sirky.length-1]||vyskaIn>c.vysky[c.vysky.length-1]);
-  return{s,v,plocha,zaklCena,pripl,priplRozpis,cena1ks,bezM,sM,warn};
+  return{s,v,plocha,zaklCena,pripl,priplRozpis,priplNazvy,cena1ks,bezM,sM,warn};
 }
+
 function pridatPolozku(){
   const typ=document.getElementById('f-typ').value;
   const sirkaIn=parseInt(document.getElementById('f-sirka').value)||0;
@@ -165,13 +173,16 @@ function pridatPolozku(){
   document.getElementById('form-note').textContent='';
   renderPriplatky();renderPolozky();renderTotal();
 }
+
 function smazat(id){polozky=polozky.filter(function(p){return p.id!==id;});renderPolozky();renderTotal();}
+
 function toggle(id){
   const body=document.getElementById('pb-'+id),head=document.getElementById('ph-'+id);
   const open=body.style.display==='block';
   body.style.display=open?'none':'block';
   if(open)head.classList.remove('open');else head.classList.add('open');
 }
+
 function renderPolozky(){
   const wrap=document.getElementById('polozky-wrap');
   if(!polozky.length){wrap.innerHTML='';return;}
@@ -193,9 +204,11 @@ function renderPolozky(){
   });
   html+='</div>';wrap.innerHTML=html;
 }
+
 function renderTotal(){
   const body=document.getElementById('total-body');
-  if(!polozky.length){body.innerHTML='<span class="empty">Zat\u00edm \u017e\u00e1dn\u00e9 polo\u017eky.</span>';return;}
+  const btn=document.getElementById('save-btn');
+  if(!polozky.length){body.innerHTML='<span class="empty">Zat\u00edm \u017e\u00e1dn\u00e9 polo\u017eky.</span>';btn.disabled=true;return;}
   const sumBez=polozky.reduce(function(a,p){return a+p.r.bezM;},0);
   const sumS=polozky.reduce(function(a,p){return a+p.r.sM;},0);
   const sumKs=polozky.reduce(function(a,p){return a+p.kusy;},0);
@@ -203,7 +216,53 @@ function renderTotal(){
   polozky.forEach(function(p,i){html+='<div class="total-row"><span class="tl">'+(i+1)+'. '+p.popis+' <small style="color:#9e9b90">('+p.kusy+' ks \u00b7 ovl. '+p.ovladani+')</small></span><span class="tv">'+kc(p.r.sM)+'</span></div>';});
   html+='<div class="total-row"><span>Celkem v\u010d. mont\u00e1\u017ee</span><span>'+kc(sumS)+'</span></div>';
   body.innerHTML=html;
+  btn.disabled=false;
 }
+
+function ulozitZakazku(){
+  const zakaznik=document.getElementById('f-zakaznik').value.trim()||'Neuvedeno';
+  const btn=document.getElementById('save-btn');
+  const status=document.getElementById('status-msg');
+  btn.disabled=true;
+  btn.textContent='Ukládám...';
+  status.style.display='none';
+
+  const data={
+    zakaznik:zakaznik,
+    polozky:polozky.map(function(p){
+      return {
+        popis:p.popis,
+        typ:TYPY[p.typ],
+        sirkaIn:p.sirkaIn,
+        vyskaIn:p.vyskaIn,
+        kusy:p.kusy,
+        ovladani:p.ovladani,
+        priplatkyText:p.r.priplNazvy.join(', ')||'žádné',
+        bezMontaze:p.r.bezM,
+        montaz:p.montazKs*p.kusy,
+        celkem:p.r.sM
+      };
+    })
+  };
+
+  fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(data)})
+    .then(function(r){return r.text();})
+    .then(function(){
+      status.className='status ok';
+      status.textContent='✓ Zakázka pro „'+zakaznik+'" byla uložena do Google tabulky.';
+      status.style.display='block';
+      btn.textContent='Uložit zakázku do Google tabulky';
+      btn.disabled=false;
+    })
+    .catch(function(){
+      status.className='status err';
+      status.textContent='✗ Nepodařilo se uložit. Zkontrolujte připojení k internetu.';
+      status.style.display='block';
+      btn.textContent='💾 Uložit zakázku do Google tabulky';
+      btn.disabled=false;
+    });
+}
+
 renderPriplatky();
 </script>
 </body>
